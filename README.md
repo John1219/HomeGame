@@ -2,7 +2,7 @@
 
 **Play Texas Hold'em poker with friends in real-time** - A multiplayer poker platform powered by Supabase Realtime with beautiful UI, live game synchronization, and comprehensive statistics tracking.
 
-![Poker Game in Action](C:/Users/john1/.gemini/antigravity/brain/f95e1eb2-aa13-45f4-b64a-1f51ef93151c/uploaded_image_0_1763915227660.png)
+![Poker Game in Action](docs/media/screenshots/04-poker-table-ingame.png)
 
 ---
 
@@ -41,7 +41,7 @@
 - **State Sync**: Supabase Realtime for instant game state synchronization
 - **Action Flow**: Players submit actions → Host processes → State broadcast to all
 
-![Game Architecture](C:/Users/john1/.gemini/antigravity/brain/f95e1eb2-aa13-45f4-b64a-1f51ef93151c/uploaded_image_1_1763915227660.png)
+![Joining Game Demo](docs/media/videos/joining-game-demo.webp)
 
 **Benefits:**
 - ✅ No complex server deployment
@@ -171,7 +171,7 @@ The app will be available at **http://localhost:5173**
 
 ### Creating an Account
 
-![Join Table](C:/Users/john1/.gemini/antigravity/brain/f95e1eb2-aa13-45f4-b64a-1f51ef93151c/uploaded_image_1_1763911983418.png)
+![Login Page](docs/media/screenshots/01-login-page.png)
 
 1. Navigate to the registration page
 2. Enter your email, username, and password
@@ -179,7 +179,7 @@ The app will be available at **http://localhost:5173**
 
 ### Hosting a Game
 
-![Host View](C:/Users/john1/.gemini/antigravity/brain/f95e1eb2-aa13-45f4-b64a-1f51ef93151c/uploaded_image_0_1763915227660.png)
+![Poker Table - Host View](docs/media/screenshots/04-poker-table-ingame.png)
 
 1. Click **"Host New Game"** in the lobby
 2. Configure your game:
@@ -192,7 +192,9 @@ The app will be available at **http://localhost:5173**
 
 ### Joining a Game
 
-![Client View](C:/Users/john1/.gemini/antigravity/brain/f95e1eb2-aa13-45f4-b64a-1f51ef93151c/uploaded_image_1_1763915227660.png)
+![Lobby with Available Game](docs/media/screenshots/02-lobby-with-game.png)
+
+![Join Table Screen](docs/media/screenshots/03-join-table.png)
 
 1. Browse available games in the lobby
 2. Click **"Join"** on any waiting game
