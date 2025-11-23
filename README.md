@@ -348,7 +348,7 @@ MIT License - Play responsibly and have fun!
 ## 📧 Support
 
 For questions or issues:
-- **GitHub Issues**: [Report bugs or request features](https://github.com/yourusername/HomeGame/issues)
+- **GitHub Issues**: [Report bugs or request features](https://github.com/John1219/HomeGame/issues)
 - **Documentation**: Check this README and code comments
 
 ---
