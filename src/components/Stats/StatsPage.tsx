@@ -56,21 +56,21 @@ export default function StatsPage() {
 
         // Load game history
         const { history, error: historyError } = await statsService.getGameHistory(user.id);
-        if (history && !historyError) {
+        if (history && !historyError && Array.isArray(history)) {
             // Transform the nested structure from Supabase
             const transformedHistory = history
-                .filter((item: any) => item.games) // Filter out any entries without game data
+                .filter((item: any) => item?.games) // Filter out any entries without game data
                 .map((item: any) => ({
-                    id: item.games.id,
-                    game_type: item.games.game_type,
-                    variant: item.games.variant,
-                    small_blind: item.games.small_blind,
-                    big_blind: item.games.big_blind,
-                    started_at: item.games.started_at,
-                    ended_at: item.games.ended_at,
-                    placement: item.placement,
-                    ending_chips: item.ending_chips,
-                    hands_won: item.hands_won,
+                    id: item.games?.id ?? 'unknown',
+                    game_type: item.games?.game_type ?? 'cash',
+                    variant: item.games?.variant ?? 'holdem',
+                    small_blind: item.games?.small_blind ?? 0,
+                    big_blind: item.games?.big_blind ?? 0,
+                    started_at: item.games?.started_at ?? '',
+                    ended_at: item.games?.ended_at ?? '',
+                    placement: item?.placement,
+                    ending_chips: item?.ending_chips,
+                    hands_won: item?.hands_won ?? 0,
                 }));
             setGameHistory(transformedHistory);
         } else {
@@ -88,7 +88,8 @@ export default function StatsPage() {
         setLoading(false);
     };
 
-    const formatDate = (dateString: string) => {
+    const formatDate = (dateString: string | null | undefined) => {
+        if (!dateString) return '';
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', {
             month: 'short',
@@ -156,7 +157,7 @@ export default function StatsPage() {
                 ) : (
                     <>
                         {/* Statistics Tab */}
-                        {activeTab === 'stats' && stats && (
+                        {activeTab === 'stats' && (
                             <div>
                                 {/* Overall Stats */}
                                 <div className="glass-card" style={{ padding: '2rem', marginBottom: '1.5rem' }}>
@@ -164,12 +165,12 @@ export default function StatsPage() {
                                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
                                         <div style={{ padding: '1.5rem', background: 'rgba(78, 204, 163, 0.1)', borderRadius: '0.5rem', textAlign: 'center' }}>
                                             <div className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Total Hands</div>
-                                            <div style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{stats.total_hands_played.toLocaleString()}</div>
+                                            <div style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{(stats?.total_hands_played ?? 0).toLocaleString()}</div>
                                         </div>
 
                                         <div style={{ padding: '1.5rem', background: 'rgba(78, 204, 163, 0.1)', borderRadius: '0.5rem', textAlign: 'center' }}>
                                             <div className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Hands Won</div>
-                                            <div style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{stats.hands_won.toLocaleString()}</div>
+                                            <div style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{(stats?.hands_won ?? 0).toLocaleString()}</div>
                                         </div>
 
                                         <div style={{ padding: '1.5rem', background: 'rgba(78, 204, 163, 0.1)', borderRadius: '0.5rem', textAlign: 'center' }}>
@@ -179,7 +180,7 @@ export default function StatsPage() {
 
                                         <div style={{ padding: '1.5rem', background: 'rgba(255, 165, 2, 0.1)', borderRadius: '0.5rem', textAlign: 'center' }}>
                                             <div className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Biggest Pot</div>
-                                            <div className="text-gold" style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{stats.biggest_pot.toLocaleString()}</div>
+                                            <div className="text-gold" style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{(stats?.biggest_pot ?? 0).toLocaleString()}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -190,27 +191,27 @@ export default function StatsPage() {
                                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
                                         <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '0.5rem', textAlign: 'center' }}>
                                             <div className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Games Played</div>
-                                            <div style={{ fontSize: '2rem', fontWeight: 'bold' }}>{stats.cash_games_played}</div>
+                                            <div style={{ fontSize: '2rem', fontWeight: 'bold' }}>{stats?.cash_games_played ?? 0}</div>
                                         </div>
 
                                         <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '0.5rem', textAlign: 'center' }}>
                                             <div className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Total Profit/Loss</div>
-                                            <div className={stats.cash_game_profit >= 0 ? 'text-primary' : 'text-danger'} style={{ fontSize: '2rem', fontWeight: 'bold' }}>
-                                                {stats.cash_game_profit >= 0 ? '+' : ''}{stats.cash_game_profit.toLocaleString()}
+                                            <div className={(stats?.cash_game_profit ?? 0) >= 0 ? 'text-primary' : 'text-danger'} style={{ fontSize: '2rem', fontWeight: 'bold' }}>
+                                                {(stats?.cash_game_profit ?? 0) >= 0 ? '+' : ''}{(stats?.cash_game_profit ?? 0).toLocaleString()}
                                             </div>
                                         </div>
 
                                         <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '0.5rem', textAlign: 'center' }}>
                                             <div className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Chips Won</div>
                                             <div className="text-primary" style={{ fontSize: '2rem', fontWeight: 'bold' }}>
-                                                {stats.total_chips_won.toLocaleString()}
+                                                {(stats?.total_chips_won ?? 0).toLocaleString()}
                                             </div>
                                         </div>
 
                                         <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '0.5rem', textAlign: 'center' }}>
                                             <div className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Chips Lost</div>
                                             <div className="text-danger" style={{ fontSize: '2rem', fontWeight: 'bold' }}>
-                                                {stats.total_chips_lost.toLocaleString()}
+                                                {(stats?.total_chips_lost ?? 0).toLocaleString()}
                                             </div>
                                         </div>
                                     </div>
@@ -222,24 +223,24 @@ export default function StatsPage() {
                                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
                                         <div style={{ padding: '1.5rem', background: 'rgba(255, 165, 2, 0.1)', borderRadius: '0.5rem', textAlign: 'center' }}>
                                             <div className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Tournaments Played</div>
-                                            <div style={{ fontSize: '2rem', fontWeight: 'bold' }}>{stats.tournaments_played}</div>
+                                            <div style={{ fontSize: '2rem', fontWeight: 'bold' }}>{stats?.tournaments_played ?? 0}</div>
                                         </div>
 
                                         <div style={{ padding: '1.5rem', background: 'rgba(255, 165, 2, 0.1)', borderRadius: '0.5rem', textAlign: 'center' }}>
                                             <div className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Victories</div>
-                                            <div className="text-gold" style={{ fontSize: '2rem', fontWeight: 'bold' }}>{stats.tournaments_won}</div>
+                                            <div className="text-gold" style={{ fontSize: '2rem', fontWeight: 'bold' }}>{stats?.tournaments_won ?? 0}</div>
                                         </div>
 
                                         <div style={{ padding: '1.5rem', background: 'rgba(255, 165, 2, 0.1)', borderRadius: '0.5rem', textAlign: 'center' }}>
                                             <div className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Top 3 Finishes</div>
-                                            <div style={{ fontSize: '2rem', fontWeight: 'bold' }}>{stats.tournament_top_3}</div>
+                                            <div style={{ fontSize: '2rem', fontWeight: 'bold' }}>{stats?.tournament_top_3 ?? 0}</div>
                                         </div>
 
                                         <div style={{ padding: '1.5rem', background: 'rgba(255, 165, 2, 0.1)', borderRadius: '0.5rem', textAlign: 'center' }}>
                                             <div className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Win Rate</div>
                                             <div className="text-gold" style={{ fontSize: '2rem', fontWeight: 'bold' }}>
-                                                {stats.tournaments_played > 0
-                                                    ? ((stats.tournaments_won / stats.tournaments_played) * 100).toFixed(1)
+                                                {(stats?.tournaments_played ?? 0) > 0
+                                                    ? (((stats?.tournaments_won ?? 0) / (stats?.tournaments_played ?? 1)) * 100).toFixed(1)
                                                     : '0'}%
                                             </div>
                                         </div>
@@ -252,7 +253,7 @@ export default function StatsPage() {
                         {activeTab === 'history' && (
                             <div className="glass-card" style={{ padding: '2rem' }}>
                                 <h2 style={{ fontSize: '1.5rem', marginBottom: '1.5rem' }}>Recent Games</h2>
-                                {gameHistory.length === 0 ? (
+                                {!gameHistory || !Array.isArray(gameHistory) || gameHistory.length === 0 ? (
                                     <div style={{ textAlign: 'center', padding: '3rem' }}>
                                         <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎮</div>
                                         <p className="text-muted">No game history yet. Play some games to see your history!</p>
@@ -265,10 +266,10 @@ export default function StatsPage() {
                                                     <div>
                                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
                                                             <span style={{ fontSize: '1.5rem' }}>
-                                                                {game.game_type === 'tournament' ? '🏆' : '💰'}
+                                                                {game?.game_type === 'tournament' ? '🏆' : '💰'}
                                                             </span>
                                                             <h3 style={{ fontSize: '1.25rem' }}>
-                                                                {game.variant.toUpperCase()} - {game.game_type}
+                                                                {(game?.variant || 'holdem').toUpperCase()} - {game?.game_type || 'cash'}
                                                             </h3>
                                                             {game.placement && (
                                                                 <span
@@ -285,16 +286,16 @@ export default function StatsPage() {
                                                             )}
                                                         </div>
                                                         <div style={{ display: 'flex', gap: '2rem', fontSize: '0.875rem' }} className="text-muted">
-                                                            <span>Blinds: {game.small_blind}/{game.big_blind}</span>
-                                                            <span>Hands Won: {game.hands_won}</span>
-                                                            {game.ending_chips !== undefined && (
-                                                                <span>Final Chips: {game.ending_chips.toLocaleString()}</span>
+                                                            <span>Blinds: {game?.small_blind ?? 0}/{game?.big_blind ?? 0}</span>
+                                                            <span>Hands Won: {game?.hands_won ?? 0}</span>
+                                                            {game?.ending_chips !== undefined && (
+                                                                <span>Final Chips: {(game.ending_chips ?? 0).toLocaleString()}</span>
                                                             )}
                                                         </div>
                                                     </div>
                                                     <div style={{ textAlign: 'right' }}>
                                                         <div className="text-muted" style={{ fontSize: '0.75rem' }}>
-                                                            {formatDate(game.ended_at || game.started_at)}
+                                                            {formatDate(game?.ended_at || game?.started_at)}
                                                         </div>
                                                     </div>
                                                 </div>

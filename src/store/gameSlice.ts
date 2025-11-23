@@ -5,7 +5,10 @@ interface ExtendedGameState extends GameState {
     isHost: boolean;
     hostId: string | null;
     connected: boolean;
+    connectionStatus: 'disconnected' | 'connecting' | 'connected';
     connectedPlayers: string[];
+    error: string | null;
+    systemMessage: string | null;
 }
 
 const initialState: ExtendedGameState = {
@@ -24,7 +27,10 @@ const initialState: ExtendedGameState = {
     isHost: false,
     hostId: null,
     connected: false,
+    connectionStatus: 'disconnected',
     connectedPlayers: [],
+    error: null,
+    systemMessage: null,
 };
 
 const gameSlice = createSlice({
@@ -75,6 +81,16 @@ const gameSlice = createSlice({
                 Object.assign(player, action.payload.updates);
             }
         },
+        setConnectionStatus: (state, action: PayloadAction<'disconnected' | 'connecting' | 'connected'>) => {
+            state.connectionStatus = action.payload;
+            state.connected = action.payload === 'connected';
+        },
+        setError: (state, action: PayloadAction<string | null>) => {
+            state.error = action.payload;
+        },
+        setSystemMessage: (state, action: PayloadAction<string | null>) => {
+            state.systemMessage = action.payload;
+        },
         resetGame: () => initialState,
     },
 });
@@ -90,6 +106,9 @@ export const {
     addPlayer,
     removePlayer,
     updatePlayer,
+    setConnectionStatus,
+    setError,
+    setSystemMessage,
     resetGame,
 } = gameSlice.actions;
 

@@ -471,7 +471,7 @@ export class PokerEngine {
     /**
      * Set next player to act
      */
-    private setNextPlayer(): void {
+    setNextPlayer(): void {
         const activePlayers = this.getActivePlayers().filter(p => !p.folded && !p.allIn);
 
         if (activePlayers.length === 0) {
@@ -513,7 +513,8 @@ export class PokerEngine {
      * Get current game state
      */
     getState(): GameState {
-        return this.gameState;
+        // Return a deep copy to prevent external code from freezing our internal state
+        return JSON.parse(JSON.stringify(this.gameState));
     }
 
     /**

@@ -19,7 +19,15 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
       eventsPerSecond: 10,
     },
   },
+  global: {
+    headers: {
+      'x-my-custom-header': 'homegame-poker',
+    },
+  },
 });
+
+// Log Supabase configuration for debugging
+console.log('[Supabase] Configured with URL:', supabaseUrl?.substring(0, 30) + '...');
 
 // Database types (will be auto-generated from Supabase later)
 export interface Profile {

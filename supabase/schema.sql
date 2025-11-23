@@ -51,6 +51,11 @@ CREATE TABLE games (
   started_at TIMESTAMPTZ,
   ended_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  
+  -- Live game state
+  game_state JSONB, -- Serialized PokerEngine state for persistence
+  current_hand INTEGER DEFAULT 0,
   
   -- Tournament specific fields
   tournament_blind_schedule JSONB, -- Array of {level, small_blind, big_blind, duration_minutes}
@@ -251,6 +256,39 @@ CREATE TRIGGER on_auth_user_created
   EXECUTE FUNCTION public.handle_new_user();
 
 -- ============================================================================
+-- WEBRTC SIGNALS TABLE (for P2P connection coordination)
+-- ============================================================================
+CREATE TABLE webrtc_signals (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  room_id UUID REFERENCES games(id) ON DELETE CASCADE,
+  from_user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  to_user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  signal JSONB NOT NULL, -- WebRTC signal data
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE webrtc_signals ENABLE ROW LEVEL SECURITY;
+
+-- Users can read signals sent to them
+CREATE POLICY "Users can read own signals"
+  ON webrtc_signals FOR SELECT
+  USING (auth.uid() = to_user_id);
+
+-- Users can send signals
+CREATE POLICY "Users can send signals"
+  ON webrtc_signals FOR INSERT
+  WITH CHECK (auth.uid() = from_user_id);
+
+-- Auto-delete old signals after 1 minute
+CREATE OR REPLACE FUNCTION delete_old_webrtc_signals()
+RETURNS void AS $$
+BEGIN
+  DELETE FROM webrtc_signals
+  WHERE created_at < NOW() - INTERVAL '1 minute';
+END;
+$$ LANGUAGE plpgsql;
+
+-- ============================================================================
 -- INDEXES for better performance
 -- ============================================================================
 CREATE INDEX idx_games_status ON games(status);
@@ -259,6 +297,8 @@ CREATE INDEX idx_game_participants_game_id ON game_participants(game_id);
 CREATE INDEX idx_game_participants_user_id ON game_participants(user_id);
 CREATE INDEX idx_friends_user_id ON friends(user_id);
 CREATE INDEX idx_friends_friend_id ON friends(friend_id);
+CREATE INDEX idx_webrtc_signals_to_user ON webrtc_signals(to_user_id);
+CREATE INDEX idx_webrtc_signals_room ON webrtc_signals(room_id);
 
 -- ============================================================================
 -- INITIAL DATA (Optional - for testing)

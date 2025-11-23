@@ -67,6 +67,7 @@ export default function CreateGameForm({ userId, onClose, onGameCreated }: Creat
                     .insert({
                         game_id: game.id,
                         user_id: userId,
+                        seat_position: 0, // Host takes seat 0
                         starting_chips: gameType === 'tournament' ? startingChips : buyIn,
                     });
 
