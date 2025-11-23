@@ -19,7 +19,6 @@ export interface PlayerAction {
 class RealtimeGameService {
     private gameStateChannel: RealtimeChannel | null = null;
     private actionsChannel: RealtimeChannel | null = null;
-    private gameId: string | null = null;
 
     // Callbacks
     private onGameStateUpdateCallback: ((state: GameState) => void) | null = null;
@@ -29,7 +28,6 @@ class RealtimeGameService {
      * Subscribe to game state changes
      */
     async subscribeToGameState(gameId: string, callback: (state: GameState) => void): Promise<void> {
-        this.gameId = gameId;
         this.onGameStateUpdateCallback = callback;
 
         console.log('[Realtime] Subscribing to game state for game:', gameId);
@@ -62,7 +60,6 @@ class RealtimeGameService {
      * Subscribe to player actions (host only)
      */
     async subscribeToPlayerActions(gameId: string, callback: (action: PlayerAction) => void): Promise<void> {
-        this.gameId = gameId;
         this.onPlayerActionCallback = callback;
 
         console.log('[Realtime] Subscribing to player actions for game:', gameId);
@@ -202,7 +199,6 @@ class RealtimeGameService {
 
         this.onGameStateUpdateCallback = null;
         this.onPlayerActionCallback = null;
-        this.gameId = null;
     }
 }
 

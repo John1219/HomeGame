@@ -22,7 +22,6 @@ export interface PeerConnection {
 class P2PService {
     private peers: Map<string, PeerConnection> = new Map();
     private localStream: MediaStream | null = null;
-    private isHost: boolean = false;
     private roomId: string | null = null;
     private userId: string | null = null;
 
@@ -36,7 +35,6 @@ class P2PService {
      * Initialize as host
      */
     async initializeAsHost(roomId: string, userId: string): Promise<void> {
-        this.isHost = true;
         this.roomId = roomId;
         this.userId = userId;
         console.log(`[P2P] Initialized as HOST for room ${roomId}`);
@@ -46,7 +44,6 @@ class P2PService {
      * Initialize as client and connect to host
      */
     async initializeAsClient(roomId: string, userId: string): Promise<void> {
-        this.isHost = false;
         this.roomId = roomId;
         this.userId = userId;
         console.log(`[P2P] Initialized as CLIENT for room ${roomId}`);
@@ -272,14 +269,6 @@ class P2PService {
      * Disconnect from all peers and cleanup
      */
     disconnectAll(): void {
-        this.peers.forEach(connection => {
-            connection.peer.destroy();
-        });
-        this.peers.clear();
-
-        this.disableMedia();
-
-        this.isHost = false;
         this.roomId = null;
         this.userId = null;
     }
