@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import type { GameType } from '../../lib/supabaseClient';
+import { supabase } from '../../lib/supabaseClient';
 
 interface CreateGameFormProps {
     userId: string;
@@ -26,9 +27,6 @@ export default function CreateGameForm({ userId, onClose, onGameCreated }: Creat
         setLoading(true);
 
         try {
-            // Import supabase dynamically to avoid circular dependencies
-            const { supabase } = await import('../../lib/supabaseClient');
-
             // Tournament blind schedule array for JSONB column
             const tournamentBlindSchedule = gameType === 'tournament' ? [
                 { level: 1, small_blind: smallBlind, big_blind: bigBlind, duration_minutes: blindIncreaseInterval },
