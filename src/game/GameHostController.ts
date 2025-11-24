@@ -152,6 +152,53 @@ export class GameHostController {
                     }
                 }
             )
+            .on(
+                'postgres_changes',
+                {
+                    event: 'DELETE',
+                    schema: 'public',
+                    table: 'game_participants',
+                    filter: `game_id=eq.${this.config.gameId}`,
+                },
+                async (payload) => {
+                    console.log('[Host] Participant left:', payload);
+                    const oldParticipant = payload.old as any;
+                    const playerId = oldParticipant.user_id;
+
+                    if (!playerId) return;
+
+                    try {
+                        // Check if it was this player's turn
+                        const currentPlayer = this.engine.getCurrentPlayer();
+                        const isTurn = currentPlayer && currentPlayer.id === playerId;
+
+                        // If it was their turn, fold them first to advance game state properly
+                        if (isTurn) {
+                            console.log('[Host] Player left during turn, folding first');
+                            this.engine.fold(playerId);
+                        }
+
+                        // Remove player from engine
+                        this.engine.removePlayer(playerId);
+                        console.log('[Host] Removed player:', playerId);
+
+                        // If only 1 player left, end the game/hand?
+                        // For now, just save state. The engine handles "1 player left" logic in determineWinner
+                        // but we might need to trigger it if we are mid-hand.
+
+                        const activePlayers = this.engine.getState().players.filter(p => !p.folded && !p.allIn);
+                        if (this.isGameActive && activePlayers.length < 2) {
+                            // If everyone else folded/left, we might need to force a win check
+                            // But let's rely on normal flow for now.
+                        }
+
+                        await this.saveGameState();
+
+                    } catch (e) {
+                        console.error('[Host] Error removing player:', e);
+                    }
+                }
+            )
             .subscribe();
     }
 

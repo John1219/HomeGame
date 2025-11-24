@@ -105,6 +105,23 @@ export class PokerEngine {
      * Remove a player from the game
      */
     removePlayer(playerId: string): void {
+        const playerIndex = this.gameState.players.findIndex(p => p.id === playerId);
+        if (playerIndex === -1) return;
+
+        // If the removed player was the current player, or if the current player was after them,
+        // we need to adjust the index.
+        if (playerIndex < this.gameState.currentPlayerIndex) {
+            this.gameState.currentPlayerIndex--;
+        } else if (playerIndex === this.gameState.currentPlayerIndex) {
+            // If it was their turn, the index now points to the *next* player (who shifted into this slot),
+            // which is effectively what we want, unless we're at the end of the array.
+            if (this.gameState.currentPlayerIndex >= this.gameState.players.length - 1) {
+                this.gameState.currentPlayerIndex = 0;
+            }
+            // Note: The host controller should ideally 'fold' the player before removing them 
+            // to ensure game logic (like 'everyone else folded') triggers correctly.
+        }
+
         this.gameState.players = this.gameState.players.filter(p => p.id !== playerId);
     }
 

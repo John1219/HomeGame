@@ -134,6 +134,31 @@ export class GameClientController {
     }
 
     /**
+     * Leave the game
+     */
+    async leaveGame(): Promise<void> {
+        console.log('[Client] Leaving game');
+        try {
+            // Remove from game_participants
+            const { error } = await supabase
+                .from('game_participants')
+                .delete()
+                .eq('game_id', this.gameId)
+                .eq('user_id', this.userId);
+
+            if (error) {
+                console.error('[Client] Error leaving game:', error);
+            } else {
+                console.log('[Client] Successfully left game');
+            }
+        } catch (error) {
+            console.error('[Client] Error in leaveGame:', error);
+        } finally {
+            this.cleanup();
+        }
+    }
+
+    /**
      * Fold action
      */
     fold(): void {
