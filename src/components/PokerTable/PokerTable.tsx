@@ -97,6 +97,7 @@ export default function PokerTable() {
                         isSmallBlind: false,
                         isBigBlind: false,
                         hasActed: false,
+                        lastAction: null,
                     });
 
                     // Set up state updates

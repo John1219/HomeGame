@@ -406,7 +406,7 @@ export class PokerEngine {
             const eligible = activePlayers.filter(p => sidePot.eligiblePlayers.includes(p.id));
             const { winners: potWinners, handName } = this.evaluateHands(eligible);
             const potShare = sidePot.amount / potWinners.length;
-            potWinners.forEach(winner => {
+            potWinners.forEach((winner: Player) => {
                 winner.chips += potShare;
                 if (!winners.includes(winner.id)) {
                     winners.push(winner.id);
@@ -422,7 +422,7 @@ export class PokerEngine {
         if (mainPot > 0) {
             const { winners: potWinners, handName } = this.evaluateHands(activePlayers);
             const potShare = mainPot / potWinners.length;
-            potWinners.forEach(winner => {
+            potWinners.forEach((winner: Player) => {
                 winner.chips += potShare;
                 if (!winners.includes(winner.id)) {
                     winners.push(winner.id);
@@ -437,8 +437,8 @@ export class PokerEngine {
 
         if (primaryWinner) {
             this.gameState.lastWinner = {
-                playerId: primaryWinner.id,
-                playerName: primaryWinner.username,
+                playerId: (primaryWinner as Player).id,
+                playerName: (primaryWinner as Player).username,
                 amountWon: Math.round(totalWon),
                 handName: winningHandName
             };

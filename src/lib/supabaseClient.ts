@@ -41,6 +41,7 @@ export interface Profile {
 
 export interface Game {
   id: string;
+  game_name?: string;
   game_type: 'cash' | 'tournament';
   variant: string;
   small_blind: number;
