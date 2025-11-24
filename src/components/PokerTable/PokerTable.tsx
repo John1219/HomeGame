@@ -390,6 +390,18 @@ export default function PokerTable() {
                     totalPot={gameState.pot}
                     sidePots={gameState.sidePots || []}
                 />
+
+                {/* Winner Announcement */}
+                {gameState.phase === 'showdown' && gameState.lastWinner && (
+                    <div className="winner-announcement">
+                        <div className="winner-announcement-title">🏆 WINNER! 🏆</div>
+                        <div className="winner-announcement-player">{gameState.lastWinner.playerName}</div>
+                        <div className="winner-announcement-amount">
+                            +${gameState.lastWinner.amountWon.toLocaleString()}
+                        </div>
+                        <div className="winner-announcement-hand">{gameState.lastWinner.handName}</div>
+                    </div>
+                )}
             </div>
 
             {/* Action Buttons (only show for current player when it's their turn) */}

@@ -563,3 +563,61 @@
 
 
 
+
+/* Winner Announcement Overlay */
+.winner-announcement {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.95) 0%, rgba(255, 193, 7, 0.95) 100%);
+    color: #1a1a2e;
+    padding: 2rem 3rem;
+    border-radius: 16px;
+    text-align: center;
+    z-index: 150;
+    box-shadow: 0 10px 40px rgba(255, 215, 0, 0.6), 0 0 0 4px rgba(255, 255, 255, 0.3);
+    animation: winnerPop 0.5s ease-out;
+    min-width: 350px;
+}
+
+@keyframes winnerPop {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+    }
+    70% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+.winner-announcement-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.winner-announcement-player {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.winner-announcement-amount {
+    font-size: 2.25rem;
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+    color: #0a3622;
+}
+
+.winner-announcement-hand {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    font-style: italic;
+}
