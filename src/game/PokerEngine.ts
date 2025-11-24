@@ -69,10 +69,11 @@ export class PokerEngine {
     /**
      * Add a player to the game
      */
-    addPlayer(id: string, username: string, seatPosition: number, chips: number): void {
+    addPlayer(id: string, username: string, seatPosition: number, chips: number, avatarUrl?: string): void {
         const player: Player = {
             id,
             username,
+            avatarUrl,
             seatPosition,
             chips,
             cards: [],

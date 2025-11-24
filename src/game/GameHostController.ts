@@ -118,14 +118,15 @@ export class GameHostController {
                     console.log('[Host] New participant joined:', payload);
                     const newParticipant = payload.new as any;
 
-                    // Fetch profile info
+                    // Fetch profile info including avatar
                     const { data: profile } = await supabase
                         .from('profiles')
-                        .select('username')
+                        .select('username, avatar_url')
                         .eq('id', newParticipant.user_id)
                         .single();
 
                     const username = profile?.username || 'Player';
+                    const avatarUrl = profile?.avatar_url;
                     const currentPlayers = this.engine.getState().players;
                     const seatPosition = currentPlayers.length;
 
@@ -134,7 +135,8 @@ export class GameHostController {
                             newParticipant.user_id,
                             username,
                             seatPosition,
-                            this.config.buyIn
+                            this.config.buyIn,
+                            avatarUrl
                         );
                         console.log('[Host] Added new player:', username, 'at seat', seatPosition);
 
