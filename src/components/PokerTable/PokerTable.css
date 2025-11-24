@@ -64,7 +64,7 @@
 /* Player Seat Styling */
 .player-seat {
     position: absolute;
-    width: 140px;
+    width: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -79,8 +79,8 @@
     background: linear-gradient(135deg, rgba(30, 30, 46, 0.95) 0%, rgba(20, 20, 36, 0.95) 100%);
     border: 2px solid rgba(106, 90, 205, 0.4);
     border-radius: 12px;
-    padding: 0.75rem;
-    min-width: 120px;
+    padding: 0.5rem;
+    min-width: 85px;
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     transition: all 0.3s ease;
@@ -94,15 +94,14 @@
 }
 
 .player-avatar {
-    width: 50px;
-    height: 50px;
+    width: 35px; height: 35px;
     border-radius: 50%;
     margin: 0 auto 0.5rem;
     background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.1rem;
     font-weight: bold;
     color: white;
     border: 3px solid rgba(255, 255, 255, 0.2);
@@ -192,7 +191,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.1rem;
     font-weight: bold;
     box-shadow:
         0 2px 8px rgba(0, 0, 0, 0.3),
@@ -312,7 +311,7 @@
 }
 
 .pot-amount {
-    font-size: 1.5rem;
+    font-size: 1.1rem;
     font-weight: bold;
     color: #ffd700;
     text-shadow: 0 2px 8px rgba(255, 215, 0, 0.5);
@@ -556,7 +555,7 @@
     .community-card {
         width: 45px;
         height: 63px;
-        font-size: 1.5rem;
+        font-size: 1.1rem;
     }
 
     .player-seat {
@@ -568,3 +567,4 @@
         padding: 0.5rem;
     }
 }
+
