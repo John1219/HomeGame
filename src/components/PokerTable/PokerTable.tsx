@@ -210,14 +210,7 @@ export default function PokerTable() {
         }
     };
 
-    const handleAllIn = () => {
-        if (!user?.id) return;
-        if (controller instanceof GameClientController) {
-            controller.allIn();
-        } else if (controller instanceof GameHostController) {
-            controller.allIn(user.id);
-        }
-    };
+
 
     // Create array of all 8 seats
     const seats: (Player | null)[] = Array(8).fill(null);
@@ -419,7 +412,6 @@ export default function PokerTable() {
                     onCheck={handleCheck}
                     onCall={handleCall}
                     onRaise={handleRaise}
-                    onAllIn={handleAllIn}
                 />
             )}
         </div>
