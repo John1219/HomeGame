@@ -249,38 +249,72 @@ export default function PokerTable() {
                     >
                         Return to Lobby
                     </button>
-                    <p style={{ marginBottom: '1rem' }}>Connection Status: <strong>{connectionStatus}</strong></p>
-                    <p>Buy-in: <strong>${gameInfo?.buy_in?.toLocaleString() || '5,000'}</strong></p>
                 </div>
-
-                <div style={{ marginBottom: '2rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>Select Seat:</label>
-                    <select
-                        value={selectedSeat}
-                        onChange={(e) => setSelectedSeat(parseInt(e.target.value))}
-                        style={{ padding: '0.5rem', fontSize: '1rem' }}
-                    >
-                        {Array.from({ length: 9 }).map((_, i) => (
-                            <option key={i} value={i}>Seat {i + 1}</option>
-                        ))}
-                    </select>
-                </div>
-
-                <button
-                    className="btn btn-primary"
-                    onClick={handleJoinTable}
-                    disabled={connectionStatus !== 'connected'}
-                    style={{ padding: '0.75rem 2rem', fontSize: '1.1rem' }}
-                >
-                    {connectionStatus === 'connected' ? 'Join Game' : 'Connecting...'}
-                </button>
             </div>
-            </div >
+        );
+    }
+
+    // Show join screen for clients who haven't joined yet
+    if (!gameState.isHost && !hasJoined) {
+        return (
+            <div className="poker-table-container">
+                <div style={{ textAlign: 'center', padding: '3rem' }}>
+                    <h2 style={{ marginBottom: '2rem' }}>Join Table</h2>
+
+                    <div style={{ marginBottom: '2rem' }}>
+                        <p style={{ marginBottom: '1rem' }}>Connection Status: <strong>{connectionStatus}</strong></p>
+                        <p>Buy-in: <strong>${gameInfo?.buy_in?.toLocaleString() || '5,000'}</strong></p>
+                    </div>
+
+                    <div style={{ marginBottom: '2rem' }}>
+                        <label style={{ display: 'block', marginBottom: '0.5rem' }}>Select Seat:</label>
+                        <select
+                            value={selectedSeat}
+                            onChange={(e) => setSelectedSeat(parseInt(e.target.value))}
+                            style={{ padding: '0.5rem', fontSize: '1rem' }}
+                        >
+                            {Array.from({ length: 9 }).map((_, i) => (
+                                <option key={i} value={i}>Seat {i + 1}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <button
+                        className="btn btn-primary"
+                        onClick={handleJoinTable}
+                        disabled={connectionStatus !== 'connected'}
+                        style={{ padding: '0.75rem 2rem', fontSize: '1.1rem' }}
+                    >
+                        {connectionStatus === 'connected' ? 'Join Game' : 'Connecting...'}
+                    </button>
+                </div>
+            </div>
         );
     }
 
     return (
         <div className="poker-table-container">
+            {/* Leave Table Button */}
+            <button
+                className="btn btn-secondary"
+                onClick={() => {
+                    if (controller) {
+                        controller.cleanup();
+                    }
+                    navigate('/lobby');
+                }}
+                style={{
+                    position: 'fixed',
+                    top: '1rem',
+                    left: '1rem',
+                    zIndex: 200,
+                    padding: '0.5rem 1rem',
+                    fontSize: '0.875rem'
+                }}
+            >
+                ← Leave Table
+            </button>
+
             {/* Connection Status Indicator */}
             {connectionStatus !== 'connected' && !gameState.isHost && (
                 <div style={{
