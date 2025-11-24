@@ -19,6 +19,12 @@ export interface Player {
     isSmallBlind: boolean;
     isBigBlind: boolean;
     hasActed: boolean;
+
+export interface WinnerInfo {
+    playerId: string;
+    playerName: string;
+    amountWon: number;
+    handName: string;
 }
 
 export interface GameState {
@@ -34,6 +40,7 @@ export interface GameState {
     smallBlind: number;
     bigBlind: number;
     handNumber: number;
+    lastWinner?: WinnerInfo;
 }
 
 export interface SidePot {
@@ -355,39 +362,45 @@ export class PokerEngine {
     /**
      * Determine winner(s) and distribute pot
      */
-    determineWinner(): { winners: string[]; handName: string } {
+        determineWinner(): { winners: string[]; handName: string } {
         const activePlayers = this.getActivePlayers().filter(p => !p.folded);
+        const totalPot = this.gameState.pot;
 
         if (activePlayers.length === 1) {
-            // Only one player left
             const winner = activePlayers[0];
             winner.chips += this.gameState.pot;
+            this.gameState.lastWinner = {
+                playerId: winner.id,
+                playerName: winner.username,
+                amountWon: totalPot,
+                handName: 'Opponent folded'
+            };
             return { winners: [winner.id], handName: 'Opponent folded' };
         }
 
-        // Calculate side pots if needed
         const { sidePots, mainPot } = this.calculatePots();
-
-        // Evaluate hands and distribute pots
         const winners: string[] = [];
         let winningHandName = '';
+        let totalWon = 0;
+        let primaryWinner: Player | null = null;
 
-        // Award side pots
         for (const sidePot of sidePots) {
             const eligible = activePlayers.filter(p => sidePot.eligiblePlayers.includes(p.id));
             const { winners: potWinners, handName } = this.evaluateHands(eligible);
-
             const potShare = sidePot.amount / potWinners.length;
             potWinners.forEach(winner => {
                 winner.chips += potShare;
                 if (!winners.includes(winner.id)) {
                     winners.push(winner.id);
                     winningHandName = handName;
+                    if (!primaryWinner) {
+                        primaryWinner = winner;
+                        totalWon = potShare;
+                    }
                 }
             });
         }
 
-        // Award main pot
         if (mainPot > 0) {
             const { winners: potWinners, handName } = this.evaluateHands(activePlayers);
             const potShare = mainPot / potWinners.length;
@@ -397,7 +410,20 @@ export class PokerEngine {
                     winners.push(winner.id);
                     winningHandName = handName;
                 }
+                if (winner === primaryWinner || !primaryWinner) {
+                    if (!primaryWinner) primaryWinner = winner;
+                    totalWon += potShare;
+                }
             });
+        }
+
+        if (primaryWinner) {
+            this.gameState.lastWinner = {
+                playerId: primaryWinner.id,
+                playerName: primaryWinner.username,
+                amountWon: Math.round(totalWon),
+                handName: winningHandName
+            };
         }
 
         return { winners, handName: winningHandName };
@@ -526,3 +552,5 @@ export class PokerEngine {
         return this.gameState.players[this.gameState.currentPlayerIndex];
     }
 }
+
+
