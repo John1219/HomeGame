@@ -12,6 +12,7 @@ export interface Player {
     seatPosition: number;
     chips: number;
     cards: Card[];
+
     currentBet: number;
     folded: boolean;
     allIn: boolean;
@@ -19,6 +20,8 @@ export interface Player {
     isSmallBlind: boolean;
     isBigBlind: boolean;
     hasActed: boolean;
+    lastAction: 'check' | 'call' | 'raise' | 'fold' | 'all-in' | null;
+}
 
 export interface WinnerInfo {
     playerId: string;
@@ -91,6 +94,7 @@ export class PokerEngine {
             isSmallBlind: false,
             isBigBlind: false,
             hasActed: false,
+            lastAction: null,
         };
 
         this.gameState.players.push(player);
@@ -122,6 +126,7 @@ export class PokerEngine {
             player.folded = false;
             player.allIn = false;
             player.hasActed = false;
+            player.lastAction = null;
             player.isDealer = false;
             player.isSmallBlind = false;
             player.isBigBlind = false;
@@ -234,6 +239,11 @@ export class PokerEngine {
                 this.gameState.communityCards.push(this.deck.pop()!);
             }
         }
+
+        // Reset lastAction for new round
+        this.gameState.players.forEach(p => {
+            p.lastAction = null;
+        });
     }
 
     /**
@@ -245,6 +255,7 @@ export class PokerEngine {
 
         player.folded = true;
         player.hasActed = true;
+        player.lastAction = 'fold';
 
         return true;
     }
@@ -266,6 +277,9 @@ export class PokerEngine {
 
         if (player.chips === 0) {
             player.allIn = true;
+            player.lastAction = 'all-in';
+        } else {
+            player.lastAction = 'call';
         }
 
         return true;
@@ -297,6 +311,9 @@ export class PokerEngine {
 
         if (player.chips === 0) {
             player.allIn = true;
+            player.lastAction = 'all-in';
+        } else {
+            player.lastAction = 'raise';
         }
 
         return true;
@@ -311,6 +328,7 @@ export class PokerEngine {
         if (player.currentBet !== this.gameState.currentBet) return false;
 
         player.hasActed = true;
+        player.lastAction = 'check';
         return true;
     }
 
@@ -362,7 +380,7 @@ export class PokerEngine {
     /**
      * Determine winner(s) and distribute pot
      */
-        determineWinner(): { winners: string[]; handName: string } {
+    determineWinner(): { winners: string[]; handName: string } {
         const activePlayers = this.getActivePlayers().filter(p => !p.folded);
         const totalPot = this.gameState.pot;
 
@@ -476,7 +494,7 @@ export class PokerEngine {
             const cardStrings = [
                 ...player.cards,
                 ...this.gameState.communityCards
-            ].map(card => `${card.rank}${card.suit}`);
+            ].map(card => `${card.rank}${card.suit} `);
 
             return {
                 player,

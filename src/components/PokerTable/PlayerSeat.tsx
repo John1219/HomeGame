@@ -98,6 +98,15 @@ export default function PlayerSeat({
                     {player.allIn && (
                         <span className="status-badge all-in-badge">All-In</span>
                     )}
+                    {!player.folded && !player.allIn && player.lastAction === 'check' && (
+                        <span className="status-badge check-badge">Check</span>
+                    )}
+                    {!player.folded && !player.allIn && player.lastAction === 'call' && (
+                        <span className="status-badge call-badge">Call</span>
+                    )}
+                    {!player.folded && !player.allIn && player.lastAction === 'raise' && (
+                        <span className="status-badge raise-badge">Raise</span>
+                    )}
                 </div>
             </div>
 
