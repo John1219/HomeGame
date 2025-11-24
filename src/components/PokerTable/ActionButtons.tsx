@@ -12,7 +12,6 @@ interface ActionButtonsProps {
     onCheck: () => void;
     onCall: () => void;
     onRaise: (amount: number) => void;
-    onAllIn: () => void;
 }
 
 export default function ActionButtons({
@@ -26,8 +25,7 @@ export default function ActionButtons({
     onFold,
     onCheck,
     onCall,
-    onRaise,
-    onAllIn
+    onRaise
 }: ActionButtonsProps) {
     const callAmount = currentBet - playerCurrentBet;
     const maxRaise = playerChips;
