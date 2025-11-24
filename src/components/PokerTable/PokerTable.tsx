@@ -73,12 +73,20 @@ export default function PokerTable() {
                     const hostController = new GameHostController(config);
                     await hostController.initialize(user.id);
 
+                    // Fetch host's profile for avatar
+                    const { data: profileData } = await supabase
+                        .from('profiles')
+                        .select('avatar_url')
+                        .eq('id', user.id)
+                        .single();
+
                     // Add host as a player at seat 0
                     const hostUsername = user.user_metadata?.username || user.email || 'Host';
                     const hostState = hostController.getGameState();
                     hostState.players.push({
                         id: user.id,
                         username: hostUsername,
+                        avatarUrl: profileData?.avatar_url || undefined,
                         seatPosition: 0,
                         chips: config.buyIn,
                         cards: [],

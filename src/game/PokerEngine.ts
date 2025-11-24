@@ -8,6 +8,7 @@ export interface Card {
 export interface Player {
     id: string;
     username: string;
+    avatarUrl?: string;
     seatPosition: number;
     chips: number;
     cards: Card[];

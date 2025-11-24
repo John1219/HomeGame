@@ -61,7 +61,20 @@ export default function PlayerSeat({
 
             <div className="player-info" title={`${player.username}${isCurrentPlayer ? ' (You)' : ''}`}>
                 <div className="player-avatar">
-                    {player.username.charAt(0).toUpperCase()}
+                    {player.avatarUrl ? (
+                        <img
+                            src={player.avatarUrl}
+                            alt={player.username}
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                                borderRadius: '50%'
+                            }}
+                        />
+                    ) : (
+                        player.username.charAt(0).toUpperCase()
+                    )}
                 </div>
 
                 <div className="player-chips">
