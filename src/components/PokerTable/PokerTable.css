@@ -476,13 +476,11 @@
     transform: translateX(-50%);
 }
 
-.seat-1 {
-    bottom: 15%;
+.seat-1 { bottom: 10%;
     right: 12%;
 }
 
-.seat-2 {
-    bottom: 35%;
+.seat-2 { bottom: 30%;
     right: 5%;
 }
 
@@ -507,13 +505,11 @@
     left: 12%;
 }
 
-.seat-7 {
-    top: 40%;
+.seat-7 { top: 35%;
     left: 5%;
 }
 
-.seat-8 {
-    bottom: 35%;
+.seat-8 { bottom: 30%;
     left: 5%;
 }
 
@@ -567,4 +563,5 @@
         padding: 0.5rem;
     }
 }
+
 
