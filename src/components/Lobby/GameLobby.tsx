@@ -131,8 +131,8 @@ export default function GameLobby() {
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <div style={{ flex: 1 }}>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-                                                <h3 style={{ fontSize: '1.25rem' }}>
-                                                    {game.game_type === 'tournament' ? '🏆' : '💰'} {game.variant.toUpperCase()}
+                                                <h3 style={{ fontSize: '1.25rem', margin: 0 }}>
+                                                    {game.game_name || `${game.game_type === 'tournament' ? 'Tournament' : 'Cash Game'} Table`}
                                                 </h3>
                                                 <span
                                                     className={game.status === 'waiting' ? 'text-primary' : 'text-warning'}
@@ -145,6 +145,9 @@ export default function GameLobby() {
                                                 >
                                                     {game.status === 'waiting' ? 'Waiting' : 'In Progress'}
                                                 </span>
+                                            </div>
+                                            <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
+                                                {game.game_type === 'tournament' ? '🏆' : '💰'} {game.variant.toUpperCase()}
                                             </div>
                                             <div style={{ display: 'flex', gap: '2rem', fontSize: '0.875rem' }} className="text-muted">
                                                 <span>Blinds: {game.small_blind}/{game.big_blind}</span>

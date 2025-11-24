@@ -9,6 +9,7 @@ interface CreateGameFormProps {
 }
 
 export default function CreateGameForm({ userId, onClose, onGameCreated }: CreateGameFormProps) {
+    const [gameName, setGameName] = useState('');
     const [gameType, setGameType] = useState<GameType>('cash');
     const [smallBlind, setSmallBlind] = useState(10);
     const [bigBlind, setBigBlind] = useState(20);
@@ -40,6 +41,7 @@ export default function CreateGameForm({ userId, onClose, onGameCreated }: Creat
                 .from('games')
                 .insert({
                     host_id: userId,
+                    game_name: gameName || `${gameType === 'tournament' ? 'Tournament' : 'Cash Game'} Table`,
                     game_type: gameType,
                     variant: 'holdem',
                     small_blind: smallBlind,
@@ -102,6 +104,20 @@ export default function CreateGameForm({ userId, onClose, onGameCreated }: Creat
                         <div>Tournament</div>
                     </button>
                 </div>
+            </div>
+
+            {/* Game Name */}
+            <div className="form-group">
+                <label className="form-label">Game Name (Optional)</label>
+                <input
+                    type="text"
+                    className="input"
+                    value={gameName}
+                    onChange={(e) => setGameName(e.target.value)}
+                    placeholder={`${gameType === 'tournament' ? 'Tournament' : 'Cash Game'} Table`}
+                    maxLength={100}
+                />
+                <small className="text-muted">Give your game a custom name so friends can find it easily</small>
             </div>
 
             {/* Blinds */}
