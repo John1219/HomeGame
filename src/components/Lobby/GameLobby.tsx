@@ -26,8 +26,24 @@ export default function GameLobby() {
             })
             .subscribe();
 
+        // Cleanup empty games every minute
+        const cleanupInterval = setInterval(async () => {
+            const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000).toISOString();
+
+            // Delete games that have been empty for 10+ minutes
+            await supabase
+                .from('games')
+                .delete()
+                .lt('last_activity_at', tenMinutesAgo)
+                .in('status', ['waiting', 'active']);
+
+            // Refresh the game list after cleanup
+            loadGames();
+        }, 60000); // Run every minute
+
         return () => {
             channel.unsubscribe();
+            clearInterval(cleanupInterval);
         };
     }, []);
 
