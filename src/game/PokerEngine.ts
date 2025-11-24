@@ -77,6 +77,13 @@ export class PokerEngine {
     }
 
     /**
+     * Set game state (for restoration)
+     */
+    setState(state: GameState): void {
+        this.gameState = state;
+    }
+
+    /**
      * Add a player to the game
      */
     addPlayer(id: string, username: string, seatPosition: number, chips: number, avatarUrl?: string): void {

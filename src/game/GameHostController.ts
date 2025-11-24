@@ -60,6 +60,19 @@ export class GameHostController {
             }
         );
 
+        // Try to restore existing game state
+        const existingState = await realtimeGameService.fetchGameState(this.config.gameId);
+        if (existingState) {
+            console.log('[Host] Restoring existing game state');
+            this.engine.setState(existingState);
+
+            // Determine if game is active
+            if (existingState.phase !== 'waiting' && existingState.phase !== 'ended') {
+                this.isGameActive = true;
+                console.log('[Host] Game restored as ACTIVE in phase:', existingState.phase);
+            }
+        }
+
         // Subscribe to game_participants to detect when players join
         await this.subscribeToParticipants();
 
@@ -85,20 +98,28 @@ export class GameHostController {
             for (let i = 0; i < participants.length; i++) {
                 const p = participants[i];
                 const username = (p.profiles as any)?.username || 'Player';
-                try {
-                    this.engine.addPlayer(p.user_id, username, i, this.config.buyIn);
-                    console.log('[Host] Added existing player:', username, 'at seat', i);
-                } catch (e) {
-                    console.warn('[Host] Could not add player:', e);
+
+                // Check if player already exists in restored state
+                const existingPlayer = this.engine.getState().players.find(player => player.id === p.user_id);
+
+                if (!existingPlayer) {
+                    try {
+                        this.engine.addPlayer(p.user_id, username, i, this.config.buyIn);
+                        console.log('[Host] Added existing player:', username, 'at seat', i);
+                    } catch (e) {
+                        console.warn('[Host] Could not add player:', e);
+                    }
+                } else {
+                    console.log('[Host] Player already in state:', username);
                 }
             }
 
-            // Start game if we have >= 2 players
-            if (participants.length >= 2 && !this.isGameActive) {
+            // Start game if we have >= 2 players AND game is not active
+            if (this.engine.getState().players.length >= 2 && !this.isGameActive) {
                 this.isGameActive = true;
                 this.startNewHand();
-            } else {
-                // Save initial state
+            } else if (!this.isGameActive) {
+                // Save initial state if waiting
                 await this.saveGameState();
             }
         }
