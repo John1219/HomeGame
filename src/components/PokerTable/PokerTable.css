@@ -411,50 +411,6 @@
 /* Raise Amount Input */
 .raise-controls {
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: center;
-}
-
-.raise-slider {
-    width: 200px;
-    height: 6px;
-    border-radius: 3px;
-    background: rgba(106, 90, 205, 0.3);
-    outline: none;
-    -webkit-appearance: none;
-}
-
-.raise-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--primary);
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.raise-slider::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--primary);
-    cursor: pointer;
-    border: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.raise-amount {
-    font-size: 0.875rem;
-    color: var(--gold);
-    font-weight: 600;
-}
-
-/* Game Phase Indicator */
-.game-phase {
-    position: absolute;
-    top: 2rem;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(20, 20, 36, 0.95);
