@@ -219,8 +219,8 @@ export default function PokerTable() {
         }
     };
 
-    // Create array of all 9 seats
-    const seats: (Player | null)[] = Array(9).fill(null);
+    // Create array of all 8 seats
+    const seats: (Player | null)[] = Array(8).fill(null);
     if (gameState.players) {
         gameState.players.forEach(player => {
             seats[player.seatPosition] = player;
@@ -282,7 +282,7 @@ export default function PokerTable() {
                             onChange={(e) => setSelectedSeat(parseInt(e.target.value))}
                             style={{ padding: '0.5rem', fontSize: '1rem' }}
                         >
-                            {Array.from({ length: 9 }).map((_, i) => (
+                            {Array.from({ length: 8 }).map((_, i) => (
                                 <option key={i} value={i}>Seat {i + 1}</option>
                             ))}
                         </select>
@@ -409,6 +409,7 @@ export default function PokerTable() {
             {currentPlayer && !currentPlayer.folded && (
                 <ActionButtons
                     currentBet={gameState.currentBet}
+                    potSize={gameState.pot}
                     playerChips={currentPlayer.chips}
                     playerCurrentBet={currentPlayer.currentBet}
                     minRaise={minRaise}

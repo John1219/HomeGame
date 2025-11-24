@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface ActionButtonsProps {
     currentBet: number;
+    potSize: number;
     playerChips: number;
     playerCurrentBet: number;
     minRaise: number;
@@ -16,6 +17,7 @@ interface ActionButtonsProps {
 
 export default function ActionButtons({
     currentBet,
+    potSize,
     playerChips,
     playerCurrentBet,
     minRaise,
@@ -31,12 +33,22 @@ export default function ActionButtons({
     const maxRaise = playerChips;
     const [raiseAmount, setRaiseAmount] = useState(minRaise);
 
+    // Reset raise amount when turn changes or min raise changes
+    useEffect(() => {
+        setRaiseAmount(minRaise);
+    }, [minRaise, isPlayerTurn]);
+
     const handleRaiseSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setRaiseAmount(parseInt(e.target.value));
     };
 
     const handleRaise = () => {
         onRaise(raiseAmount);
+    };
+
+    const setRaiseTo = (amount: number) => {
+        let newAmount = Math.max(minRaise, Math.min(amount, maxRaise));
+        setRaiseAmount(Math.floor(newAmount));
     };
 
     return (
@@ -72,9 +84,34 @@ export default function ActionButtons({
                 </button>
             )}
 
-            {/* Raise */}
+            {/* Raise Controls */}
             {playerChips > callAmount && (
                 <div className="raise-controls">
+                    {/* Preset Buttons */}
+                    <div style={{ display: 'flex', gap: '5px', marginBottom: '5px' }}>
+                        <button
+                            className="preset-button"
+                            onClick={() => setRaiseTo(minRaise * 2.2)}
+                            disabled={!isPlayerTurn}
+                        >
+                            2.2x
+                        </button>
+                        <button
+                            className="preset-button"
+                            onClick={() => setRaiseTo(potSize)}
+                            disabled={!isPlayerTurn}
+                        >
+                            Pot
+                        </button>
+                        <button
+                            className="preset-button"
+                            onClick={() => setRaiseTo(maxRaise)}
+                            disabled={!isPlayerTurn}
+                        >
+                            Max
+                        </button>
+                    </div>
+
                     <input
                         type="range"
                         className="raise-slider"
@@ -97,14 +134,9 @@ export default function ActionButtons({
                 </div>
             )}
 
-            {/* All-in */}
-            <button
-                className="action-button all-in"
-                onClick={onAllIn}
-                disabled={!isPlayerTurn || playerChips === 0}
-            >
-                All-In ${playerChips.toLocaleString()}
-            </button>
+            {/* All-in (Separate button, or just use Max preset) */}
+            {/* Keeping separate All-in button for clarity if needed, but Max preset covers it for raise */}
+            {/* If chips <= callAmount, they can only call all-in, handled by Call button logic usually or specific All-in call */}
         </div>
     );
 }

@@ -14,7 +14,7 @@ export default function CreateGameForm({ userId, onClose, onGameCreated }: Creat
     const [smallBlind, setSmallBlind] = useState(10);
     const [bigBlind, setBigBlind] = useState(20);
     const [buyIn, setBuyIn] = useState(1000);
-    const [maxPlayers, setMaxPlayers] = useState(9);
+    const [maxPlayers, setMaxPlayers] = useState(8);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
