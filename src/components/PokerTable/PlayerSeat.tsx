@@ -59,14 +59,9 @@ export default function PlayerSeat({
                 </div>
             )}
 
-            <div className="player-info">
+            <div className="player-info" title={`${player.username}${isCurrentPlayer ? ' (You)' : ''}`}>
                 <div className="player-avatar">
                     {player.username.charAt(0).toUpperCase()}
-                </div>
-
-                <div className="player-name">
-                    {player.username}
-                    {isCurrentPlayer && ' (You)'}
                 </div>
 
                 <div className="player-chips">
