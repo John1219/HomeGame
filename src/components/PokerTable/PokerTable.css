@@ -19,7 +19,7 @@
     background: radial-gradient(ellipse at center, #0f5132 0%, #0a3622 100%);
     border-radius: 50%;
     border: 20px solid #8b4513;
-    box-shadow: 
+    box-shadow:
         0 0 0 4px #d4a574,
         inset 0 0 60px rgba(0, 0, 0, 0.5),
         0 20px 60px rgba(0, 0, 0, 0.7);
@@ -33,21 +33,17 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: 
-        repeating-linear-gradient(
-            0deg,
+    background-image:
+        repeating-linear-gradient(0deg,
             transparent,
             transparent 2px,
             rgba(255, 255, 255, 0.03) 2px,
-            rgba(255, 255, 255, 0.03) 4px
-        ),
-        repeating-linear-gradient(
-            90deg,
+            rgba(255, 255, 255, 0.03) 4px),
+        repeating-linear-gradient(90deg,
             transparent,
             transparent 2px,
             rgba(255, 255, 255, 0.03) 2px,
-            rgba(255, 255, 255, 0.03) 4px
-        );
+            rgba(255, 255, 255, 0.03) 4px);
     border-radius: 50%;
     pointer-events: none;
 }
@@ -92,7 +88,7 @@
 
 .player-seat.active-turn .player-info {
     border-color: var(--primary);
-    box-shadow: 
+    box-shadow:
         0 4px 15px rgba(0, 0, 0, 0.5),
         0 0 30px rgba(106, 90, 205, 0.5);
 }
@@ -198,7 +194,7 @@
     justify-content: center;
     font-size: 1.5rem;
     font-weight: bold;
-    box-shadow: 
+    box-shadow:
         0 2px 8px rgba(0, 0, 0, 0.3),
         0 0 0 1px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease;
@@ -265,7 +261,7 @@
     justify-content: center;
     font-size: 2rem;
     font-weight: bold;
-    box-shadow: 
+    box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.4),
         0 0 0 2px rgba(0, 0, 0, 0.1);
     animation: dealCard 0.3s ease-out;
@@ -282,6 +278,7 @@
         transform: translateY(-100px) rotateY(180deg);
         opacity: 0;
     }
+
     to {
         transform: translateY(0) rotateY(0deg);
         opacity: 1;
@@ -300,7 +297,7 @@
     padding: 0.75rem 1.5rem;
     min-width: 150px;
     text-align: center;
-    box-shadow: 
+    box-shadow:
         0 4px 20px rgba(0, 0, 0, 0.5),
         0 0 40px rgba(255, 215, 0, 0.2);
     z-index: 9;
@@ -324,30 +321,30 @@
 /* Action Buttons */
 .action-buttons {
     position: fixed;
-    bottom: 2rem;
+    bottom: 1rem;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 1rem;
-    padding: 1.5rem;
-    background: rgba(20, 20, 36, 0.95);
-    border: 2px solid rgba(106, 90, 205, 0.4);
-    border-radius: 16px;
-    backdrop-filter: blur(20px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: rgba(20, 20, 36, 0.9);
+    border: 1px solid rgba(106, 90, 205, 0.3);
+    border-radius: 12px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     z-index: 100;
 }
 
 .action-button {
-    padding: 0.875rem 2rem;
-    font-size: 1rem;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.875rem;
     font-weight: 600;
-    border-radius: 8px;
-    border: 2px solid transparent;
+    border-radius: 6px;
+    border: 1px solid transparent;
     cursor: pointer;
     transition: all 0.2s ease;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
 }
 
 .action-button:disabled {
@@ -474,15 +471,52 @@
 }
 
 /* Seat Positions for 9-max table */
-.seat-0 { bottom: 5%; left: 50%; transform: translateX(-50%); }
-.seat-1 { bottom: 15%; right: 12%; }
-.seat-2 { bottom: 35%; right: 5%; }
-.seat-3 { top: 40%; right: 5%; }
-.seat-4 { top: 15%; right: 12%; }
-.seat-5 { top: 5%; left: 50%; transform: translateX(-50%); }
-.seat-6 { top: 15%; left: 12%; }
-.seat-7 { top: 40%; left: 5%; }
-.seat-8 { bottom: 35%; left: 5%; }
+.seat-0 {
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.seat-1 {
+    bottom: 15%;
+    right: 12%;
+}
+
+.seat-2 {
+    bottom: 35%;
+    right: 5%;
+}
+
+.seat-3 {
+    top: 40%;
+    right: 5%;
+}
+
+.seat-4 {
+    top: 15%;
+    right: 12%;
+}
+
+.seat-5 {
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.seat-6 {
+    top: 15%;
+    left: 12%;
+}
+
+.seat-7 {
+    top: 40%;
+    left: 5%;
+}
+
+.seat-8 {
+    bottom: 35%;
+    left: 5%;
+}
 
 /* Empty Seat */
 .empty-seat {
@@ -500,12 +534,12 @@
         width: 95vw;
         height: 65vh;
     }
-    
+
     .action-buttons {
         gap: 0.5rem;
         padding: 1rem;
     }
-    
+
     .action-button {
         padding: 0.75rem 1.5rem;
         font-size: 0.875rem;
@@ -518,17 +552,17 @@
         height: 49px;
         font-size: 1.2rem;
     }
-    
+
     .community-card {
         width: 45px;
         height: 63px;
         font-size: 1.5rem;
     }
-    
+
     .player-seat {
         width: 100px;
     }
-    
+
     .player-info {
         min-width: 90px;
         padding: 0.5rem;
