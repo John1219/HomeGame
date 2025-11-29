@@ -45,7 +45,7 @@ export class GameClientController {
             }
 
             // Subscribe to game state updates
-            await realtimeGameService.subscribeToGameState(
+            realtimeGameService.subscribeToGameState(
                 this.gameId,
                 (gameState: GameState) => {
                     this.handleGameStateUpdate(gameState);

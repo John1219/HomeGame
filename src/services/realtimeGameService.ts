@@ -27,7 +27,7 @@ class RealtimeGameService {
     /**
      * Subscribe to game state changes
      */
-    async subscribeToGameState(gameId: string, callback: (state: GameState) => void): Promise<void> {
+    subscribeToGameState(gameId: string, callback: (state: GameState) => void): void {
         this.onGameStateUpdateCallback = callback;
 
         console.log('[Realtime] Subscribing to game state for game:', gameId);

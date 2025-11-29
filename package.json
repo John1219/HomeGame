@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.10.1",
-    "@supabase/supabase-js": "^2.84.0",
+    "@supabase/supabase-js": "^2.86.0",
     "buffer": "^6.0.3",
     "date-fns": "^4.1.0",
     "dotenv": "^17.2.3",

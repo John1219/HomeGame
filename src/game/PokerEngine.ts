@@ -361,16 +361,32 @@ export class PokerEngine {
      */
     isBettingRoundComplete(): boolean {
         const activePlayers = this.getActivePlayers().filter(p => !p.folded);
+        console.log('[Engine] Checking betting round complete. Active players:', activePlayers.length);
 
-        if (activePlayers.length <= 1) return true;
+        if (activePlayers.length <= 1) {
+            console.log('[Engine] Only 1 or fewer active players, round complete');
+            return true;
+        }
 
         const playersWhoCanAct = activePlayers.filter(p => !p.allIn);
+        console.log('[Engine] Players who can act:', playersWhoCanAct.length);
 
-        if (playersWhoCanAct.length === 0) return true;
+        if (playersWhoCanAct.length === 0) {
+            console.log('[Engine] All players all-in, round complete');
+            return true;
+        }
 
-        return playersWhoCanAct.every(p =>
+        const allActedAndMatched = playersWhoCanAct.every(p =>
             p.hasActed && p.currentBet === this.gameState.currentBet
         );
+
+        console.log('[Engine] Player states:');
+        playersWhoCanAct.forEach(p => {
+            console.log(`  ${p.username}: hasActed=${p.hasActed}, currentBet=${p.currentBet}, gameBet=${this.gameState.currentBet}`);
+        });
+
+        console.log('[Engine] All acted and matched?', allActedAndMatched);
+        return allActedAndMatched;
     }
 
     /**

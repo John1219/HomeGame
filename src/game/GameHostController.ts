@@ -296,6 +296,12 @@ export class GameHostController {
         }
 
         this.engine.advancePhase();
+
+        // Set invalid player index AFTER advancePhase (which calls setNextPlayer)
+        // This prevents controls from activating during the 2s delay
+        const state = this.engine.getState();
+        state.currentPlayerIndex = -1;
+
         await this.saveGameState();
 
         // Determine winner at showdown
@@ -305,6 +311,9 @@ export class GameHostController {
 
             // Mark hand as ended
             setTimeout(async () => {
+                // Set invalid player index during hand end
+                const state = this.engine.getState();
+                state.currentPlayerIndex = -1;
                 await this.saveGameState();
                 // Start new hand after delay
                 setTimeout(() => this.startNewHand(), 5000);

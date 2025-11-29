@@ -126,7 +126,9 @@ export default function PokerTable() {
                     });
 
                     clientController.onConnectionStatus((status: string) => {
+                        console.log('[PokerTable] onConnectionStatus callback fired with:', status);
                         dispatch(setConnectionStatus(status as any));
+                        console.log('[PokerTable] Redux dispatch completed');
                     });
 
                     // Connect to host
@@ -256,11 +258,14 @@ export default function PokerTable() {
         );
     }
 
+    // Check if current user is already in the game
+    const userInGame = gameState.players?.find((p: Player) => p.id === user?.id);
+
     // Show join screen for clients who haven't joined yet
-    if (!gameState.isHost && !hasJoined) {
+    if (!gameState.isHost && !userInGame) {
         return (
-            <div className="poker-table-container">
-                <div style={{ textAlign: 'center', padding: '3rem' }}>
+            <div className="poker-table-container" style={{ pointerEvents: 'auto' }}>
+                <div style={{ textAlign: 'center', padding: '3rem', pointerEvents: 'auto', position: 'relative', zIndex: 9999 }}>
                     <h2 style={{ marginBottom: '2rem' }}>Join Table</h2>
 
                     <div style={{ marginBottom: '2rem' }}>
@@ -273,7 +278,8 @@ export default function PokerTable() {
                         <select
                             value={selectedSeat}
                             onChange={(e) => setSelectedSeat(parseInt(e.target.value))}
-                            style={{ padding: '0.5rem', fontSize: '1rem' }}
+                            disabled={false}
+                            style={{ padding: '0.5rem', fontSize: '1rem', pointerEvents: 'auto' }}
                         >
                             {Array.from({ length: 8 }).map((_, i) => (
                                 <option key={i} value={i}>Seat {i + 1}</option>
@@ -284,10 +290,21 @@ export default function PokerTable() {
                     <button
                         className="btn btn-primary"
                         onClick={handleJoinTable}
-                        disabled={connectionStatus !== 'connected'}
-                        style={{ padding: '0.75rem 2rem', fontSize: '1.1rem' }}
+                        disabled={false}
+                        style={{
+                            padding: '0.75rem 2rem',
+                            fontSize: '1.1rem',
+                            pointerEvents: 'auto',
+                            cursor: 'pointer',
+                            opacity: 1,
+                            backgroundColor: '#3b82f6',
+                            color: 'white',
+                            border: 'none',
+                            position: 'relative',
+                            zIndex: 10000
+                        }}
                     >
-                        {connectionStatus === 'connected' ? 'Join Game' : 'Connecting...'}
+                        Join Game
                     </button>
                 </div>
             </div>
